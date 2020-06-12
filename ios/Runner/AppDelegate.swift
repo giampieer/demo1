@@ -15,7 +15,7 @@ import Foundation
         let channel = FlutterMethodChannel(name: "battery", binaryMessenger: controller as! FlutterBinaryMessenger)
         channel.setMethodCallHandler({
             (call: FlutterMethodCall, result: FlutterResult) -> Void in
-            guard call.method == "getBatteryLevel" else {
+            guard call.method == "getBattery" else {
                 result(FlutterMethodNotImplemented)
                 return
             }
@@ -36,6 +36,12 @@ import Foundation
         GeneratedPluginRegistrant.register(with: self)
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
+    private func receiveDate(result: FlutterResult) {
+           let formatter = DateFormatter()
+            formatter.timeStyle = .full
+            let dateString = formatter.string(from:Date())
+            result(dateString)
+        }
 
     private func receiveBatteryLevel(result: FlutterResult) {
         let device = UIDevice.current
@@ -45,12 +51,6 @@ import Foundation
         } else {
             result(Int(device.batteryLevel * 100))
         }
-    }
-    private func receiveDate(result: FlutterResult) {
-       let formatter = DateFormatter()
-        formatter.timeStyle = .full
-        let dateString = formatter.string(from:Date())
-        result(dateString)
     }
 
 }
